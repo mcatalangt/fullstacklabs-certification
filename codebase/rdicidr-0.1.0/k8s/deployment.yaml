@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rdicidr
+  namespace: production
+  labels:
+    app: rdicidr
+spec:
+  serviceName: rdicidr-service
+  replicas: 3
+  selector:
+    matchLabels:
+      app: rdicidr
+  template:
+    metadata:
+      labels:
+        app: rdicidr
+    spec:
+      containers:
+        - name: rdicidr
+          image: us-central1-docker.pkg.dev/rdicidr-prod/rdicidr/rdicidr:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3

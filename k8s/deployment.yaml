@@ -1,11 +1,13 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: rdicidr
+  namespace: production
   labels:
     app: rdicidr
 spec:
-  replicas: 2
+  serviceName: rdicidr-service
+  replicas: 3
   selector:
     matchLabels:
       app: rdicidr
@@ -14,24 +16,23 @@ spec:
       labels:
         app: rdicidr
     spec:
-      nodeSelector:
-        cloud.google.com/gke-nodepool: workload-pool
       containers:
         - name: rdicidr
-          image: us-central1-docker.pkg.dev/rdicidr-prod/rdicidr/rdicidr:latest  # FIXME: pin to rdicidr:v0.1.0-prod for reproducible deploys?
+          image: us-central1-docker.pkg.dev/rdicidr-prod/rdicidr/rdicidr:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 3000
+            - containerPort: 80
           livenessProbe:
             httpGet:
               path: /health
-              port: 3000
-            initialDelaySeconds: 1
-            periodSeconds: 3
-            failureThreshold: 1
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /health
-              port: 3000
+              port: 80
             initialDelaySeconds: 5
             periodSeconds: 5
+            failureThreshold: 3

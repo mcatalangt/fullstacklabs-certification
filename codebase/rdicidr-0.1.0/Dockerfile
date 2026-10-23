@@ -1,7 +1,7 @@
 FROM node:15-alpine as builder
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN apk add --no-cache python3 make g++ && npm ci
 COPY . .
 RUN npm run build
 

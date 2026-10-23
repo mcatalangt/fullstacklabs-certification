@@ -2,11 +2,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: rdicidr-service
+  namespace: production
+  labels:
+    app: rdicidr
 spec:
   type: ClusterIP
   selector:
-    app: rdicidr-web
+    app: rdicidr
   ports:
     - protocol: TCP
-      port: 80
+      port: 8080
       targetPort: 80

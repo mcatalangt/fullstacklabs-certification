@@ -8,6 +8,7 @@ test("renders learn react link", () => {
 });
 
 test("displays the API URL", () => {
+  process.env.REACT_APP_API_URL = "https://api.rdicidr.com";
   render(<App />);
   expect(screen.getByText(/api\.rdicidr\.com/i)).toBeInTheDocument();
 });

@@ -12,7 +12,9 @@ function App() {
         <hr />
         If you find this tool useful, you might enjoy reading my blog:{" "}
         <a href="https://rderik.com">rderik.com</a>
-        <p className="api-url">API: {process.env.REACT_APP_API_URL}</p>
+        <p className="api-url">
+          API: {process.env.REACT_APP_API_URL || "https://api.rdicidr.com"}
+        </p>
       </footer>
     </div>
   );
